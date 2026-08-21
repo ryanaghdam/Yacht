@@ -408,7 +408,9 @@ body {
   cursor: pointer;
 }
 
-.roll-btn:hover { opacity: 0.9; }
+.roll-btn:hover:not(:disabled) { opacity: 0.9; }
+
+button:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .control-label {
   font-size: 11px;
