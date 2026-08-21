@@ -105,17 +105,60 @@ function persistAndRender() {
 
 function doRoll() {
   if (state.rollsUsed >= 3 || gameOver(state)) return;
+  const wasFirstRoll = state.rollsUsed === 0;
+  const heldBefore = [...state.held];
   state = roll(state);
   selected = null;
-  persistAndRender();
+  animateShuffle(i => wasFirstRoll || !heldBefore[i], persistAndRender);
 }
 
 function doEnter() {
   const legal = legalCategories(state);
   if (selected === null || !legal.includes(selected)) return;
+  const justFilled = selected;
   state = commit(state, selected);
   selected = null;
   persistAndRender();
+  flashCell(justFilled);
+}
+
+function animateShuffle(isShuffling, done) {
+  const dice = document.querySelectorAll('.die');
+  for (let i = 0; i < 5; i++) {
+    if (isShuffling(i)) {
+      dice[i].classList.remove('empty');
+      dice[i].classList.add('rolling');
+    }
+  }
+  const start = performance.now();
+  const duration = 420;
+  const swapEvery = 65;
+  let lastSwap = -swapEvery;
+  const step = (now) => {
+    const elapsed = now - start;
+    if (elapsed - lastSwap >= swapEvery) {
+      lastSwap = elapsed;
+      for (let i = 0; i < 5; i++) {
+        if (isShuffling(i)) dice[i].dataset.value = String(1 + Math.floor(Math.random() * 6));
+      }
+    }
+    if (elapsed >= duration) {
+      for (let i = 0; i < 5; i++) dice[i].classList.remove('rolling');
+      done();
+      return;
+    }
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function flashCell(cat) {
+  const cell = document.querySelector(`.cell-val[data-cat="${cat}"]`);
+  if (!cell) return;
+  cell.classList.remove('just-filled');
+  void cell.offsetWidth;
+  cell.classList.add('just-filled');
+  setTimeout(() => cell.classList.remove('just-filled'), 700);
 }
 
 function doToggleHold(index) {
