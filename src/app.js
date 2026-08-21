@@ -1,7 +1,7 @@
 import {
   newGame, roll, toggleHold, commit,
   legalCategories, previewScores, grandTotal, gameOver,
-  CATEGORIES,
+  upperSubtotal, upperBonus, CATEGORIES,
 } from './game.js';
 
 let state = newGame();
@@ -9,6 +9,17 @@ let selected = null;
 
 function render() {
   document.getElementById('grand-total').textContent = String(grandTotal(state));
+
+  const upperSub = upperSubtotal(state);
+  const bonus = upperBonus(state);
+  const upperEl = document.getElementById('upper-progress');
+  if (bonus > 0) {
+    upperEl.textContent = '+35 bonus';
+    upperEl.classList.add('earned');
+  } else {
+    upperEl.textContent = `${upperSub} / 63`;
+    upperEl.classList.remove('earned');
+  }
 
   const rollInd = document.getElementById('roll-indicator');
   rollInd.textContent =

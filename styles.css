@@ -122,7 +122,13 @@ body {
   letter-spacing: 1px;
   color: var(--text-muted);
   margin-top: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
+
+.upper-progress { font-variant-numeric: tabular-nums; }
+.upper-progress.earned { color: var(--accent-text); }
 
 /* Score grids */
 
