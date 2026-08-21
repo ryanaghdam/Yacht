@@ -57,24 +57,24 @@ No sound. The game is silent — no audio effects, no SOUND toggle, no WebAudio.
 - Game logic is a pure, framework-free module with no DOM dependency — it should be trivially unit-testable later.
 - CSS: one stylesheet, custom properties for the palette, no preprocessor.
 
-## Proposed file layout
+## File layout
 
 ```
-index.html
-styles.css
+index.html         # static markup for the device shell
+styles.css         # all styling, CSS variables, light/dark
 src/
   game.js          # pure rules engine: state, scoring, transitions
+  app.js           # DOM wiring — state, render, event handlers
   storage.js       # localStorage load/save (game + high score)
-  ui/
-    app.js         # top-level custom element wiring game <-> UI
-    die.js         # <yz-die value hold>
-    scorecard.js   # <yz-scorecard> with selectable rows
-    controls.js    # HOLD / SELECT / ENTER / ROLL / aux buttons
 test/
   game.test.mjs    # node:test unit tests for the rules engine
+.claude/launch.json  # local dev server config (python3 -m http.server)
 ```
 
-Nothing above is load-bearing yet — revisit once we start implementing.
+A `ui/` subfolder with per-component custom elements (`<yz-die>`,
+`<yz-scorecard>`, etc.) is deferred — the app is small enough that
+extraction would be ceremony without payoff. Revisit if/when two-player
+mode makes repeated per-player rendering worthwhile.
 
 ## Tests
 

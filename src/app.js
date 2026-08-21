@@ -3,9 +3,11 @@ import {
   legalCategories, previewScores, grandTotal, gameOver,
   upperSubtotal, upperBonus, CATEGORIES,
 } from './game.js';
+import { saveGame, loadGame, clearGame, loadHighScore, saveHighScore } from './storage.js';
 
-let state = newGame();
+let state = loadGame() ?? newGame();
 let selected = null;
+let highScoreBanked = false;
 
 function render() {
   document.getElementById('grand-total').textContent = String(grandTotal(state));
@@ -91,11 +93,21 @@ function moveSelection(dir) {
   selected = legal[(idx + dir + legal.length) % legal.length];
 }
 
+function persistAndRender() {
+  saveGame(state);
+  if (gameOver(state) && !highScoreBanked) {
+    const total = grandTotal(state);
+    if (total > loadHighScore()) saveHighScore(total);
+    highScoreBanked = true;
+  }
+  render();
+}
+
 function doRoll() {
   if (state.rollsUsed >= 3 || gameOver(state)) return;
   state = roll(state);
   selected = null;
-  render();
+  persistAndRender();
 }
 
 function doEnter() {
@@ -103,12 +115,12 @@ function doEnter() {
   if (selected === null || !legal.includes(selected)) return;
   state = commit(state, selected);
   selected = null;
-  render();
+  persistAndRender();
 }
 
 function doToggleHold(index) {
   state = toggleHold(state, index);
-  render();
+  persistAndRender();
 }
 
 function selectCategory(cat) {
@@ -127,7 +139,15 @@ function doNewGame() {
   if (inProgress && !gameOver(state) && !confirm('Start a new game? Current progress will be lost.')) return;
   state = newGame();
   selected = null;
+  highScoreBanked = false;
+  clearGame();
   render();
+}
+
+function doHighScore() {
+  const hi = loadHighScore();
+  const rollInd = document.getElementById('roll-indicator');
+  rollInd.textContent = hi > 0 ? `high score: ${hi}` : 'no high score yet';
 }
 
 document.querySelector('.roll-btn').addEventListener('click', doRoll);
@@ -135,6 +155,7 @@ document.querySelector('.enter-btn').addEventListener('click', doEnter);
 document.querySelector('[data-action="prev"]').addEventListener('click', () => { moveSelection(-1); render(); });
 document.querySelector('[data-action="next"]').addEventListener('click', () => { moveSelection(1); render(); });
 document.querySelector('[data-action="newgame"]').addEventListener('click', doNewGame);
+document.querySelector('[data-action="highscore"]').addEventListener('click', doHighScore);
 
 for (const btn of document.querySelectorAll('.hold-btn')) {
   btn.addEventListener('click', () => doToggleHold(Number(btn.dataset.index)));
