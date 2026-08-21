@@ -453,3 +453,47 @@ button:disabled { opacity: 0.35; cursor: not-allowed; }
 }
 
 button:focus-visible { outline-offset: 3px; }
+
+/* Mobile: fill the viewport, distribute vertical space, scale up touch targets */
+
+@media (max-width: 500px) {
+  body {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    min-height: 100dvh;
+  }
+
+  .device {
+    max-width: none;
+    width: 100%;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    padding:
+      max(env(safe-area-inset-top), 14px)
+      16px
+      max(env(safe-area-inset-bottom), 14px);
+    gap: 16px;
+  }
+
+  /* LCD absorbs any extra vertical space and grows its cells to match */
+  .lcd { flex: 1; min-height: 0; }
+  .grid { flex: 1; grid-auto-rows: 1fr; min-height: 60px; }
+  .cell-head, .cell-val { min-height: 0; }
+  .cell-head { padding: 8px 2px; font-size: 12px; }
+  .cell-val { padding: 10px 2px; font-size: 18px; }
+  .dice-area { margin-top: 0; }
+  .dice { gap: 10px; }
+
+  /* Slightly larger header and buttons for phone reach */
+  .app-name { font-size: 17px; }
+  .score-value { font-size: 34px; }
+  .aux-btn { min-height: 52px; font-size: 12px; }
+  .roll-btn { font-size: 16px; padding: 16px 0; }
+  .rocker-btn { padding: 16px 0; font-size: 17px; }
+  .enter-btn { width: 52px; height: 52px; font-size: 12px; }
+  .hold-dot { width: 32px; height: 32px; }
+  .hold-label { font-size: 12px; }
+  .die { border-radius: 14px; }
+}
