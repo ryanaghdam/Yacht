@@ -31,9 +31,9 @@ test('scoreFor: straights', () => {
   assert.equal(scoreFor([1,2,3,4,6], 'largeStraight'), 0);
 });
 
-test('scoreFor: yacht and chance', () => {
-  assert.equal(scoreFor([4,4,4,4,4], 'yacht'), 50);
-  assert.equal(scoreFor([4,4,4,4,3], 'yacht'), 0);
+test('scoreFor: yahtzee and chance', () => {
+  assert.equal(scoreFor([4,4,4,4,4], 'yahtzee'), 50);
+  assert.equal(scoreFor([4,4,4,4,3], 'yahtzee'), 0);
   assert.equal(scoreFor([1,3,5,2,4], 'chance'), 15);
 });
 
@@ -87,7 +87,7 @@ test('joker rule: matching upper unfilled is forced', () => {
   const j = newGame();
   j.dice = [4,4,4,4,4];
   j.rollsUsed = 1;
-  j.scores.yacht = 50;
+  j.scores.yahtzee = 50;
   assert.deepEqual(legalCategories(j), ['fours']);
 });
 
@@ -95,38 +95,38 @@ test('joker rule: matching upper filled → any open lower box', () => {
   const j = newGame();
   j.dice = [4,4,4,4,4];
   j.rollsUsed = 1;
-  j.scores.yacht = 50;
+  j.scores.yahtzee = 50;
   j.scores.fours = 20;
   const legal = legalCategories(j);
-  assert.ok(!legal.includes('yacht'), 'yacht already filled');
-  assert.ok(legal.every(c => LOWER.includes(c) && c !== 'yacht'), 'only open lower boxes');
+  assert.ok(!legal.includes('yahtzee'), 'yahtzee already filled');
+  assert.ok(legal.every(c => LOWER.includes(c) && c !== 'yahtzee'), 'only open lower boxes');
 });
 
 test('joker rule: full house scored as 25 when placed via joker', () => {
   const j = newGame();
   j.dice = [4,4,4,4,4];
   j.rollsUsed = 1;
-  j.scores.yacht = 50;
+  j.scores.yahtzee = 50;
   j.scores.fours = 20;
   assert.equal(previewScores(j).fullHouse, 25);
 });
 
-test('yacht bonus: +100 when the yacht box was originally scored 50', () => {
+test('yahtzee bonus: +100 when the yahtzee box was originally scored 50', () => {
   let b = newGame();
   b.dice = [3,3,3,3,3];
   b.rollsUsed = 3;
-  b.scores.yacht = 50;
+  b.scores.yahtzee = 50;
   b.scores.threes = null;
   const after = commit(b, 'threes');
   assert.equal(after.bonus, 100);
   assert.equal(after.scores.threes, 15);
 });
 
-test('yacht bonus: no bonus when the yacht box was scored 0', () => {
+test('yahtzee bonus: no bonus when the yahtzee box was scored 0', () => {
   let b = newGame();
   b.dice = [3,3,3,3,3];
   b.rollsUsed = 3;
-  b.scores.yacht = 0;
+  b.scores.yahtzee = 0;
   b.scores.threes = null;
   const after = commit(b, 'threes');
   assert.equal(after.bonus, 0);
@@ -141,12 +141,12 @@ test('gameOver: true only when every category is filled', () => {
   assert.equal(gameOver(done), false);
 });
 
-test('grandTotal: upper + upper bonus + lower + yacht bonus', () => {
+test('grandTotal: upper + upper bonus + lower + yahtzee bonus', () => {
   const full = newGame();
   full.scores = {
     ones: 3, twos: 6, threes: 9, fours: 12, fives: 15, sixes: 18,
     threeKind: 20, fourKind: 24, fullHouse: 25, smallStraight: 30,
-    largeStraight: 40, yacht: 50, chance: 22,
+    largeStraight: 40, yahtzee: 50, chance: 22,
   };
   full.bonus = 200;
   assert.equal(grandTotal(full), 63 + 35 + 211 + 200);
