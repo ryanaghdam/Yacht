@@ -70,9 +70,20 @@ src/
     die.js         # <yz-die value hold>
     scorecard.js   # <yz-scorecard> with selectable rows
     controls.js    # HOLD / SELECT / ENTER / ROLL / aux buttons
+test/
+  game.test.mjs    # node:test unit tests for the rules engine
 ```
 
 Nothing above is load-bearing yet — revisit once we start implementing.
+
+## Tests
+
+Rules engine has unit tests using Node's built-in test runner (no
+external deps). Run with:
+
+```
+node --test test/*.mjs
+```
 
 ## Out of scope (v1)
 
