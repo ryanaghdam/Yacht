@@ -91,7 +91,7 @@ body {
 }
 
 .app-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 2px;
   color: var(--text);
@@ -104,13 +104,13 @@ body {
 }
 
 .score-label {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
   color: var(--text-muted);
 }
 
 .score-value {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 500;
   color: var(--text);
   font-variant-numeric: tabular-nums;
@@ -118,7 +118,7 @@ body {
 }
 
 .section-tag {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
   color: var(--text-muted);
   margin-top: 2px;
@@ -152,22 +152,22 @@ body {
 }
 
 .cell-head {
-  padding: 5px 2px;
-  font-size: 10px;
+  padding: 6px 2px;
+  font-size: 11px;
   color: var(--text-muted);
   letter-spacing: 0.4px;
-  line-height: 1.15;
-  min-height: 30px;
+  line-height: 1.2;
+  min-height: 34px;
   display: grid;
   place-items: center;
 }
 
 .cell-val {
-  padding: 6px 2px;
-  font-size: 13px;
+  padding: 7px 2px;
+  font-size: 15px;
   color: var(--text);
   border-top: 0.5px solid var(--border);
-  min-height: 26px;
+  min-height: 30px;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -191,11 +191,11 @@ body {
 }
 
 .roll-indicator {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.5px;
   color: var(--text-muted);
   text-align: right;
-  min-height: 12px;
+  min-height: 14px;
 }
 
 .dice {
@@ -208,20 +208,68 @@ body {
   aspect-ratio: 1;
   background: var(--device-bg);
   border: 0.5px solid var(--border-strong);
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  font-size: clamp(28px, 9vw, 40px);
-  line-height: 1;
+  border-radius: 12px;
   color: var(--text);
   cursor: pointer;
   user-select: none;
+  --pip: 9%;
+  --edge: 22%;
+  --mid: 50%;
+  --far: 78%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
 }
 
 .die.held {
-  background: var(--accent-bg);
+  background-color: var(--accent-bg);
   border-color: var(--accent);
   color: var(--accent-text);
+}
+
+.die[data-value="1"] {
+  background-image:
+    radial-gradient(circle at var(--mid) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
+}
+
+.die[data-value="2"] {
+  background-image:
+    radial-gradient(circle at var(--edge) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
+}
+
+.die[data-value="3"] {
+  background-image:
+    radial-gradient(circle at var(--edge) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--mid) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
+}
+
+.die[data-value="4"] {
+  background-image:
+    radial-gradient(circle at var(--edge) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--edge) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
+}
+
+.die[data-value="5"] {
+  background-image:
+    radial-gradient(circle at var(--edge) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--mid) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--edge) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
+}
+
+.die[data-value="6"] {
+  background-image:
+    radial-gradient(circle at var(--edge) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--edge) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--edge) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--edge), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
+    radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
 }
 
 /* HOLD row */
@@ -260,7 +308,7 @@ body {
 }
 
 .hold-label {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.6px;
   color: var(--text-muted);
 }
@@ -274,14 +322,14 @@ body {
 }
 
 .aux-btn {
-  min-height: 42px;
+  min-height: 46px;
   display: grid;
   place-items: center;
   text-align: center;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.5px;
-  line-height: 1.2;
+  line-height: 1.25;
   padding: 6px 4px;
   background: var(--device-bg);
   color: var(--text-muted);
@@ -319,11 +367,11 @@ body {
 }
 
 .rocker-btn {
-  padding: 12px 0;
+  padding: 13px 0;
   background: none;
   border: none;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text);
   cursor: pointer;
 }
@@ -332,13 +380,13 @@ body {
 .rocker-btn:hover { background: var(--accent-bg); color: var(--accent-text); }
 
 .enter-btn {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 0.5px solid var(--border-strong);
   background: var(--device-bg);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.5px;
   color: var(--text-muted);
   cursor: pointer;
@@ -348,13 +396,13 @@ body {
 
 .roll-btn {
   width: 100%;
-  padding: 14px 0;
+  padding: 15px 0;
   border: none;
   border-radius: var(--radius-pill);
   background: var(--primary-bg);
   color: var(--primary-text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 1.5px;
   cursor: pointer;
@@ -363,7 +411,7 @@ body {
 .roll-btn:hover { opacity: 0.9; }
 
 .control-label {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.6px;
   color: var(--text-muted);
   text-align: center;
