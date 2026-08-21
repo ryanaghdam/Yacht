@@ -227,6 +227,7 @@ body {
   color: var(--accent-text);
 }
 
+
 .die[data-value="1"] {
   background-image:
     radial-gradient(circle at var(--mid) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
@@ -271,6 +272,8 @@ body {
     radial-gradient(circle at var(--far) var(--mid), currentColor var(--pip), transparent calc(var(--pip) + 0.5%)),
     radial-gradient(circle at var(--far) var(--far), currentColor var(--pip), transparent calc(var(--pip) + 0.5%));
 }
+
+.die.empty[data-value] { background-image: none; cursor: default; }
 
 /* HOLD row */
 

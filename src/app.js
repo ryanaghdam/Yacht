@@ -16,11 +16,14 @@ function render() {
     state.rollsUsed === 0 ? 'press ROLL to begin' :
     `roll ${state.rollsUsed} / 3`;
 
+  const noRoll = state.rollsUsed === 0;
   for (let i = 0; i < 5; i++) {
     const die = document.querySelector(`.die[data-index="${i}"]`);
     die.dataset.value = String(state.dice[i]);
     die.classList.toggle('held', state.held[i]);
+    die.classList.toggle('empty', noRoll);
     die.setAttribute('aria-label',
+      noRoll ? `Die ${i + 1}, not rolled` :
       `Die ${i + 1} shows ${state.dice[i]}${state.held[i] ? ', held' : ''}`);
 
     const btn = document.querySelector(`.hold-btn[data-index="${i}"]`);
