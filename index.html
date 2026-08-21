@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Yacht</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="device" aria-label="Yacht dice game">
+
+    <section class="lcd" aria-label="Scorecard">
+      <header class="lcd-header">
+        <span class="app-name">YACHT</span>
+        <span class="score-display">
+          <span class="score-label">SCORE</span>
+          <span class="score-value" id="grand-total">0</span>
+        </span>
+      </header>
+
+      <div class="section-tag">UPPER</div>
+      <div class="grid grid-upper" role="table" aria-label="Upper section">
+        <div class="cell-head">1s</div>
+        <div class="cell-head">2s</div>
+        <div class="cell-head">3s</div>
+        <div class="cell-head">4s</div>
+        <div class="cell-head">5s</div>
+        <div class="cell-head">6s</div>
+        <div class="cell-val empty" data-cat="ones">—</div>
+        <div class="cell-val empty" data-cat="twos">—</div>
+        <div class="cell-val empty" data-cat="threes">—</div>
+        <div class="cell-val empty" data-cat="fours">—</div>
+        <div class="cell-val empty" data-cat="fives">—</div>
+        <div class="cell-val empty" data-cat="sixes">—</div>
+      </div>
+
+      <div class="section-tag">LOWER</div>
+      <div class="grid grid-lower" role="table" aria-label="Lower section">
+        <div class="cell-head">3 OF<br>KIND</div>
+        <div class="cell-head">4 OF<br>KIND</div>
+        <div class="cell-head">FULL<br>HSE</div>
+        <div class="cell-head">SM.<br>STR</div>
+        <div class="cell-head">LG.<br>STR</div>
+        <div class="cell-head">YACHT</div>
+        <div class="cell-head">CHNC</div>
+        <div class="cell-head cell-bonus">BONUS</div>
+        <div class="cell-val empty" data-cat="threeKind">—</div>
+        <div class="cell-val empty" data-cat="fourKind">—</div>
+        <div class="cell-val empty" data-cat="fullHouse">—</div>
+        <div class="cell-val empty" data-cat="smallStraight">—</div>
+        <div class="cell-val empty" data-cat="largeStraight">—</div>
+        <div class="cell-val empty" data-cat="yacht">—</div>
+        <div class="cell-val empty" data-cat="chance">—</div>
+        <div class="cell-val cell-bonus empty" data-cat="bonus">—</div>
+      </div>
+
+      <div class="dice-area">
+        <div class="roll-indicator" id="roll-indicator">press ROLL to begin</div>
+        <div class="dice" role="group" aria-label="Dice">
+          <div class="die" data-index="0" data-value="1">⚀</div>
+          <div class="die" data-index="1" data-value="2">⚁</div>
+          <div class="die" data-index="2" data-value="3">⚂</div>
+          <div class="die" data-index="3" data-value="4">⚃</div>
+          <div class="die" data-index="4" data-value="5">⚄</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="holds" role="group" aria-label="Hold buttons">
+      <button class="hold-btn" data-index="0" aria-label="Hold die 1" aria-pressed="false">
+        <span class="hold-dot"></span>
+        <span class="hold-label">HOLD</span>
+      </button>
+      <button class="hold-btn" data-index="1" aria-label="Hold die 2" aria-pressed="false">
+        <span class="hold-dot"></span>
+        <span class="hold-label">HOLD</span>
+      </button>
+      <button class="hold-btn" data-index="2" aria-label="Hold die 3" aria-pressed="false">
+        <span class="hold-dot"></span>
+        <span class="hold-label">HOLD</span>
+      </button>
+      <button class="hold-btn" data-index="3" aria-label="Hold die 4" aria-pressed="false">
+        <span class="hold-dot"></span>
+        <span class="hold-label">HOLD</span>
+      </button>
+      <button class="hold-btn" data-index="4" aria-label="Hold die 5" aria-pressed="false">
+        <span class="hold-dot"></span>
+        <span class="hold-label">HOLD</span>
+      </button>
+    </div>
+
+    <div class="aux" role="group" aria-label="Auxiliary controls">
+      <button class="aux-btn" data-action="subtotal">SUB-<br>TOTAL</button>
+      <button class="aux-btn" data-action="highscore">HIGH<br>SCORE</button>
+      <button class="aux-btn" data-action="newgame">NEW<br>GAME</button>
+    </div>
+
+    <div class="action">
+      <div class="control-group">
+        <div class="rocker" role="group" aria-label="Select">
+          <button class="rocker-btn" data-action="prev" aria-label="Previous category">◀</button>
+          <button class="rocker-btn" data-action="next" aria-label="Next category">▶</button>
+        </div>
+        <div class="control-label">SELECT</div>
+      </div>
+      <div class="control-group">
+        <button class="enter-btn" data-action="enter" aria-label="Enter">ENT</button>
+        <div class="control-label">ENTER</div>
+      </div>
+      <div class="control-group">
+        <button class="roll-btn" data-action="roll">ROLL</button>
+        <div class="control-label">ROLL / ON</div>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>
