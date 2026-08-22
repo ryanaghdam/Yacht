@@ -1,5 +1,5 @@
-const GAME_KEY = 'yacht:game';
-const HIGH_KEY = 'yacht:highscore';
+const GAME_KEY = 'yahtzee:game';
+const HIGH_KEY = 'yahtzee:highscore';
 
 export function saveGame(state) {
   try { localStorage.setItem(GAME_KEY, JSON.stringify(state)); }

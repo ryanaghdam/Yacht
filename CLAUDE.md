@@ -1,12 +1,12 @@
-# Yacht — a dice game inspired by the MB Electronic handheld
+# Yahtzee — a dice game inspired by the MB Electronic handheld
 
-A static web page that recreates the ergonomics of the MB Electronic Yahtzee handheld with a modern, minimalist look. The app is called **Yacht** — the older, non-trademarked name for this family of dice games — so all user-facing copy avoids the "Yahtzee" trademark, though the ruleset we implement is the classic one that handheld played. Single `index.html` you can double-click to open — no build step, no server required.
+A static web page that recreates the ergonomics of the MB Electronic Yahtzee handheld with a modern, minimalist look. Single `index.html` you can double-click to open — no build step, no server required.
 
 ## Design intent
 
 - **Look:** fully modern minimalist. Clean typography, generous spacing, restrained palette. **Not** a skeuomorphic reproduction of the plastic shell.
 - **Layout:** matches the handheld's physical layout, top to bottom. The photo of the device is the spec; "modern minimalist" governs styling, not placement. The order is:
-  1. **LCD area:** header row shows the app name on the left and the **running grand total** on the right (always visible — not hidden behind SUB-TOTAL). Then the scorecard grid: upper section as a 6-column strip; lower section as an **8-column strip** — the seven categories (3-kind, 4-kind, full house, sm straight, lg straight, Yacht, chance) plus a dedicated **BONUS** cell at the end that tallies Yacht bonuses (100, 200, 300, …). The dice row sits at the **bottom** of the LCD so each die is directly above its HOLD button. A subtle "roll N/3" indicator appears near the dice while a turn is in progress; there is no visible "turn N/13" counter.
+  1. **LCD area:** header row shows the app name on the left and the **running grand total** on the right (always visible — not hidden behind SUB-TOTAL). Then the scorecard grid: upper section as a 6-column strip; lower section as an **8-column strip** — the seven categories (3-kind, 4-kind, full house, sm straight, lg straight, Yahtzee, chance) plus a dedicated **BONUS** cell at the end that tallies Yahtzee bonuses (100, 200, 300, …). The dice row sits at the **bottom** of the LCD so each die is directly above its HOLD button. A subtle "roll N/3" indicator appears near the dice while a turn is in progress; there is no visible "turn N/13" counter.
   2. **HOLD row:** 5 buttons, one directly under each die.
   3. **Aux row:** HIGH SCORE · NEW GAME. (No SUB-TOTAL: the grand total is always visible in the LCD header and the upper-bonus progress renders inline with the UPPER label, so there is nothing left for SUB-TOTAL to reveal.)
   4. **Action row:** SELECT (wide rocker with ◀ ▶) · ENTER (small round, center) · ROLL (wide, right).
@@ -25,12 +25,12 @@ No keyboard shortcuts in v1 (may add later).
 
 ## Ruleset
 
-The classic ruleset the MB handheld plays, with our category names substituted for the trademarked ones:
+The classic ruleset the MB handheld plays:
 
 - **Upper section:** 1s through 6s. Bonus of **+35** if the upper total is ≥ 63.
-- **Lower section:** 3-of-a-kind (sum of all dice), 4-of-a-kind (sum), Full House (25), Small Straight (30), Large Straight (40), **Yacht** — five of a kind (50), Chance (sum).
-- **Yacht bonus:** each additional five-of-a-kind after the first, if the Yacht box was scored as 50, awards **+100** (accumulated in the dedicated BONUS cell of the lower grid) and follows joker rules (must use the matching upper box if unfilled; otherwise any lower box; otherwise zero an upper box). If the Yacht box was scored as 0, no bonus.
-- **Bonus-Yacht UX:** when a bonus Yacht is rolled, the app auto-applies the joker rule when there is exactly one valid destination (matching upper box empty ⇒ fill it; only one lower box left ⇒ fill it) and credits +100 on ENTER. When the choice is genuinely open (matching upper filled, multiple lower boxes free), SELECT/ENTER lets the player pick where the score goes; +100 is credited either way.
+- **Lower section:** 3-of-a-kind (sum of all dice), 4-of-a-kind (sum), Full House (25), Small Straight (30), Large Straight (40), **Yahtzee** — five of a kind (50), Chance (sum).
+- **Yahtzee bonus:** each additional five-of-a-kind after the first, if the Yahtzee box was scored as 50, awards **+100** (accumulated in the dedicated BONUS cell of the lower grid) and follows joker rules (must use the matching upper box if unfilled; otherwise any lower box; otherwise zero an upper box). If the Yahtzee box was scored as 0, no bonus.
+- **Bonus-Yahtzee UX:** when a bonus Yahtzee is rolled, the app auto-applies the joker rule when there is exactly one valid destination (matching upper box empty ⇒ fill it; only one lower box left ⇒ fill it) and credits +100 on ENTER. When the choice is genuinely open (matching upper filled, multiple lower boxes free), SELECT/ENTER lets the player pick where the score goes; +100 is credited either way.
 - **Turn:** up to 3 rolls per turn; hold any subset of dice between rolls. Must score into exactly one box per turn (may zero any unfilled box).
 - **Game length:** 13 turns per player.
 

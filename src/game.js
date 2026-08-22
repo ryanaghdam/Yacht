@@ -1,5 +1,5 @@
 export const UPPER = ['ones', 'twos', 'threes', 'fours', 'fives', 'sixes'];
-export const LOWER = ['threeKind', 'fourKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yacht', 'chance'];
+export const LOWER = ['threeKind', 'fourKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yahtzee', 'chance'];
 export const CATEGORIES = [...UPPER, ...LOWER];
 
 const UPPER_BY_FACE = { 1: 'ones', 2: 'twos', 3: 'threes', 4: 'fours', 5: 'fives', 6: 'sixes' };
@@ -36,12 +36,12 @@ export function commit(state, category) {
   if (!legal.includes(category)) throw new Error(`cannot commit ${category} now`);
 
   const isFiveKind = fiveKind(state.dice);
-  const yachtFilled = state.scores.yacht !== null;
-  const useJoker = isFiveKind && yachtFilled && LOWER.includes(category) && category !== 'yacht';
+  const yahtzeeFilled = state.scores.yahtzee !== null;
+  const useJoker = isFiveKind && yahtzeeFilled && LOWER.includes(category) && category !== 'yahtzee';
   const value = useJoker ? jokerScoreFor(state.dice, category) : scoreFor(state.dice, category);
 
   const scores = { ...state.scores, [category]: value };
-  const bonus = state.bonus + (isFiveKind && state.scores.yacht === 50 ? 100 : 0);
+  const bonus = state.bonus + (isFiveKind && state.scores.yahtzee === 50 ? 100 : 0);
 
   return {
     ...state,
@@ -58,7 +58,7 @@ export function legalCategories(state) {
   if (state.rollsUsed === 0) return [];
   const unfilled = CATEGORIES.filter(c => state.scores[c] === null);
 
-  if (fiveKind(state.dice) && state.scores.yacht !== null) {
+  if (fiveKind(state.dice) && state.scores.yahtzee !== null) {
     const matching = UPPER_BY_FACE[state.dice[0]];
     if (unfilled.includes(matching)) return [matching];
     const openLower = unfilled.filter(c => LOWER.includes(c));
@@ -73,9 +73,9 @@ export function previewScores(state) {
   const preview = {};
   if (state.rollsUsed === 0) return preview;
   const isFiveKind = fiveKind(state.dice);
-  const yachtFilled = state.scores.yacht !== null;
+  const yahtzeeFilled = state.scores.yahtzee !== null;
   for (const cat of legalCategories(state)) {
-    const useJoker = isFiveKind && yachtFilled && LOWER.includes(cat) && cat !== 'yacht';
+    const useJoker = isFiveKind && yahtzeeFilled && LOWER.includes(cat) && cat !== 'yahtzee';
     preview[cat] = useJoker ? jokerScoreFor(state.dice, cat) : scoreFor(state.dice, cat);
   }
   return preview;
@@ -96,7 +96,7 @@ export function scoreFor(dice, category) {
     case 'fullHouse': return isFullHouse(counts) ? 25 : 0;
     case 'smallStraight': return hasStraight(dice, 4) ? 30 : 0;
     case 'largeStraight': return hasStraight(dice, 5) ? 40 : 0;
-    case 'yacht': return hasNOfKind(counts, 5) ? 50 : 0;
+    case 'yahtzee': return hasNOfKind(counts, 5) ? 50 : 0;
     case 'chance': return total;
   }
   throw new Error(`unknown category: ${category}`);
