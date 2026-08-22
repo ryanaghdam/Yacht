@@ -39,6 +39,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html, body {
   margin: 0;
@@ -294,6 +295,67 @@ body {
 
 .die.rolling { animation: die-shake 0.42s ease-out; }
 
+/* Game over banner (replaces dice area when the game ends) */
+
+.game-over {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px 10px;
+  border: 0.5px solid var(--accent);
+  background: var(--accent-bg);
+  border-radius: 10px;
+  margin-top: 2px;
+}
+
+.go-eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.go-score {
+  font-size: 56px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.go-supporting {
+  font-size: 12px;
+  color: var(--accent-text);
+  letter-spacing: 0.4px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.go-supporting .prev {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.go-supporting .star { color: var(--accent); }
+.go-supporting .high-val { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.go-hint {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.go-arrow { color: var(--accent); }
+
 @keyframes die-shake {
   0%   { transform: translateY(0)   rotate(0deg); }
   25%  { transform: translateY(-3px) rotate(-6deg); }
@@ -369,6 +431,23 @@ body {
 }
 
 .aux-btn:hover { color: var(--text); }
+
+.aux-btn.pulse {
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  border-color: var(--primary-bg);
+  animation: aux-pulse 1.8s ease-out infinite;
+}
+
+@keyframes aux-pulse {
+  0%   { box-shadow: 0 0 0 0   color-mix(in srgb, var(--accent) 40%, transparent); }
+  70%  { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0   transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aux-btn.pulse { animation: none; }
+}
 
 /* Action row */
 

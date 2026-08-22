@@ -59,7 +59,7 @@
         <div class="cell-val cell-bonus empty" data-cat="bonus">—</div>
       </div>
 
-      <div class="dice-area">
+      <div class="dice-area" id="dice-area">
         <div class="roll-indicator" id="roll-indicator">press ROLL to begin</div>
         <div class="dice" role="group" aria-label="Dice">
           <div class="die" data-index="0" data-value="1" aria-label="Die 1 shows 1"></div>
@@ -68,6 +68,13 @@
           <div class="die" data-index="3" data-value="4" aria-label="Die 4 shows 4"></div>
           <div class="die" data-index="4" data-value="5" aria-label="Die 5 shows 5"></div>
         </div>
+      </div>
+
+      <div class="game-over" id="game-over" role="status" aria-live="polite" hidden>
+        <div class="go-eyebrow">Game Over</div>
+        <div class="go-score" id="go-score">0</div>
+        <div class="go-supporting" id="go-supporting"></div>
+        <div class="go-hint">press <span class="go-arrow">↓</span> NEW GAME</div>
       </div>
     </section>
 

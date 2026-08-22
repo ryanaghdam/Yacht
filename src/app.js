@@ -7,7 +7,6 @@ import { saveGame, loadGame, clearGame, loadHighScore, saveHighScore } from './s
 
 let state = loadGame() ?? newGame();
 let selected = null;
-let highScoreBanked = false;
 
 function render() {
   document.getElementById('grand-total').textContent = String(grandTotal(state));
@@ -23,11 +22,16 @@ function render() {
     upperEl.classList.remove('earned');
   }
 
+  const over = gameOver(state);
   const rollInd = document.getElementById('roll-indicator');
   rollInd.textContent =
-    gameOver(state) ? 'game over' :
     state.rollsUsed === 0 ? 'press ROLL to begin' :
     `roll ${state.rollsUsed} / 3`;
+
+  document.getElementById('dice-area').hidden = over;
+  document.getElementById('game-over').hidden = !over;
+  document.querySelector('[data-action="newgame"]').classList.toggle('pulse', over);
+  if (over) renderGameOver();
 
   const noRoll = state.rollsUsed === 0;
   for (let i = 0; i < 5; i++) {
@@ -82,6 +86,20 @@ function render() {
     selected === null || !legal.includes(selected);
 }
 
+function renderGameOver() {
+  document.getElementById('go-score').textContent = String(grandTotal(state));
+  const supporting = document.getElementById('go-supporting');
+  const info = state.finalHigh;
+  if (info?.isNewHigh) {
+    supporting.innerHTML =
+      '<span class="star">★</span><span>NEW HIGH SCORE</span>' +
+      (info.previousHigh > 0 ? `<span class="prev">${info.previousHigh}</span>` : '');
+  } else {
+    const high = info?.previousHigh ?? loadHighScore();
+    supporting.innerHTML = `<span>high score</span><span class="high-val">${high}</span>`;
+  }
+}
+
 function moveSelection(dir) {
   const legal = legalCategories(state);
   if (legal.length === 0) { selected = null; return; }
@@ -94,12 +112,14 @@ function moveSelection(dir) {
 }
 
 function persistAndRender() {
-  saveGame(state);
-  if (gameOver(state) && !highScoreBanked) {
+  if (gameOver(state) && !state.finalHigh) {
     const total = grandTotal(state);
-    if (total > loadHighScore()) saveHighScore(total);
-    highScoreBanked = true;
+    const previousHigh = loadHighScore();
+    const isNewHigh = total > previousHigh;
+    if (isNewHigh) saveHighScore(total);
+    state = { ...state, finalHigh: { isNewHigh, previousHigh } };
   }
+  saveGame(state);
   render();
 }
 
@@ -182,7 +202,6 @@ function doNewGame() {
   if (inProgress && !gameOver(state) && !confirm('Start a new game? Current progress will be lost.')) return;
   state = newGame();
   selected = null;
-  highScoreBanked = false;
   clearGame();
   render();
 }
@@ -214,4 +233,5 @@ for (const cell of document.querySelectorAll('.cell-val')) {
   cell.addEventListener('click', () => selectCategory(cat));
 }
 
-render();
+if (gameOver(state)) persistAndRender();
+else render();
