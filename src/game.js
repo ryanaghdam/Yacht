@@ -2,8 +2,6 @@ export const UPPER = ['ones', 'twos', 'threes', 'fours', 'fives', 'sixes'];
 export const LOWER = ['threeKind', 'fourKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yahtzee', 'chance'];
 export const CATEGORIES = [...UPPER, ...LOWER];
 
-const UPPER_BY_FACE = { 1: 'ones', 2: 'twos', 3: 'threes', 4: 'fours', 5: 'fives', 6: 'sixes' };
-
 export function newGame() {
   const scores = {};
   for (const c of CATEGORIES) scores[c] = null;
@@ -34,49 +32,34 @@ export function toggleHold(state, index) {
 export function commit(state, category) {
   const legal = legalCategories(state);
   if (!legal.includes(category)) throw new Error(`cannot commit ${category} now`);
-
-  const isFiveKind = fiveKind(state.dice);
-  const yahtzeeFilled = state.scores.yahtzee !== null;
-  const useJoker = isFiveKind && yahtzeeFilled && LOWER.includes(category) && category !== 'yahtzee';
-  const value = useJoker ? jokerScoreFor(state.dice, category) : scoreFor(state.dice, category);
-
+  const value = scoreFor(state.dice, category);
   const scores = { ...state.scores, [category]: value };
-  const bonus = state.bonus + (isFiveKind && state.scores.yahtzee === 50 ? 100 : 0);
+  return endTurn({ ...state, scores });
+}
 
-  return {
-    ...state,
-    scores,
-    bonus,
-    dice: [1, 1, 1, 1, 1],
-    held: [false, false, false, false, false],
-    rollsUsed: 0,
-    turn: state.turn + 1,
-  };
+export function isBonusYahtzee(state) {
+  return state.rollsUsed > 0 && fiveKind(state.dice) && state.scores.yahtzee === 50;
+}
+
+export function applyBonusYahtzee(state) {
+  if (!isBonusYahtzee(state)) return state;
+  return endTurn({ ...state, bonus: state.bonus + 100 });
+}
+
+export function isFreshYahtzee(state) {
+  return state.rollsUsed > 0 && fiveKind(state.dice) && state.scores.yahtzee === null;
 }
 
 export function legalCategories(state) {
   if (state.rollsUsed === 0) return [];
-  const unfilled = CATEGORIES.filter(c => state.scores[c] === null);
-
-  if (fiveKind(state.dice) && state.scores.yahtzee !== null) {
-    const matching = UPPER_BY_FACE[state.dice[0]];
-    if (unfilled.includes(matching)) return [matching];
-    const openLower = unfilled.filter(c => LOWER.includes(c));
-    if (openLower.length > 0) return openLower;
-    return unfilled.filter(c => UPPER.includes(c));
-  }
-
-  return unfilled;
+  if (isBonusYahtzee(state)) return [];
+  return CATEGORIES.filter(c => state.scores[c] === null);
 }
 
 export function previewScores(state) {
   const preview = {};
-  if (state.rollsUsed === 0) return preview;
-  const isFiveKind = fiveKind(state.dice);
-  const yahtzeeFilled = state.scores.yahtzee !== null;
   for (const cat of legalCategories(state)) {
-    const useJoker = isFiveKind && yahtzeeFilled && LOWER.includes(cat) && cat !== 'yahtzee';
-    preview[cat] = useJoker ? jokerScoreFor(state.dice, cat) : scoreFor(state.dice, cat);
+    preview[cat] = scoreFor(state.dice, cat);
   }
   return preview;
 }
@@ -102,19 +85,6 @@ export function scoreFor(dice, category) {
   throw new Error(`unknown category: ${category}`);
 }
 
-function jokerScoreFor(dice, category) {
-  const total = sumDice(dice);
-  switch (category) {
-    case 'threeKind': return total;
-    case 'fourKind': return total;
-    case 'fullHouse': return 25;
-    case 'smallStraight': return 30;
-    case 'largeStraight': return 40;
-    case 'chance': return total;
-    default: return scoreFor(dice, category);
-  }
-}
-
 export function upperSubtotal(state) {
   return UPPER.reduce((s, c) => s + (state.scores[c] ?? 0), 0);
 }
@@ -133,6 +103,16 @@ export function grandTotal(state) {
 
 export function gameOver(state) {
   return CATEGORIES.every(c => state.scores[c] !== null);
+}
+
+function endTurn(state) {
+  return {
+    ...state,
+    dice: [1, 1, 1, 1, 1],
+    held: [false, false, false, false, false],
+    rollsUsed: 0,
+    turn: state.turn + 1,
+  };
 }
 
 function rollDie(rng) {

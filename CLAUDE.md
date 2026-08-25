@@ -29,9 +29,10 @@ The classic ruleset the MB handheld plays:
 
 - **Upper section:** 1s through 6s. Bonus of **+35** if the upper total is ≥ 63.
 - **Lower section:** 3-of-a-kind (sum of all dice), 4-of-a-kind (sum), Full House (25), Small Straight (30), Large Straight (40), **Yahtzee** — five of a kind (50), Chance (sum).
-- **Yahtzee bonus:** each additional five-of-a-kind after the first, if the Yahtzee box was scored as 50, awards **+100** (accumulated in the dedicated BONUS cell of the lower grid) and follows joker rules (must use the matching upper box if unfilled; otherwise any lower box; otherwise zero an upper box). If the Yahtzee box was scored as 0, no bonus.
-- **Bonus-Yahtzee UX:** when a bonus Yahtzee is rolled, the app auto-applies the joker rule when there is exactly one valid destination (matching upper box empty ⇒ fill it; only one lower box left ⇒ fill it) and credits +100 on ENTER. When the choice is genuinely open (matching upper filled, multiple lower boxes free), SELECT/ENTER lets the player pick where the score goes; +100 is credited either way.
-- **Turn:** up to 3 rolls per turn; hold any subset of dice between rolls. Must score into exactly one box per turn (may zero any unfilled box).
+- **Yahtzee bonus:** each additional five-of-a-kind after the first, if the Yahtzee box was scored as 50, awards **+100** (accumulated in the dedicated BONUS cell of the lower grid). If the Yahtzee box was scored as 0, no bonus. There is no joker rule — a bonus Yahtzee is just the +100.
+- **Bonus-Yahtzee UX:** the moment a bonus Yahtzee is rolled the app credits +100 automatically, flashes the BONUS cell, and ends the turn. The player never picks another box to fill.
+- **Fresh Yahtzee UX:** when 5-of-a-kind is rolled and the Yahtzee box is still empty, the Yahtzee row is auto-selected so ENTER commits the 50.
+- **Turn:** up to 3 rolls per turn; hold any subset of dice between rolls. A turn normally ends by scoring into exactly one box (may zero any unfilled box); a bonus Yahtzee is the one exception — its turn ends automatically without filling a box.
 - **Game length:** 13 turns per player.
 
 ## Two-player mode (optional)

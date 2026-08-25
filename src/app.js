@@ -2,6 +2,7 @@ import {
   newGame, roll, toggleHold, commit,
   legalCategories, previewScores, grandTotal, gameOver,
   upperSubtotal, upperBonus, CATEGORIES,
+  isBonusYahtzee, applyBonusYahtzee, isFreshYahtzee,
 } from './game.js';
 import { saveGame, loadGame, clearGame, loadHighScore, saveHighScore } from './storage.js';
 
@@ -129,7 +130,18 @@ function doRoll() {
   const heldBefore = [...state.held];
   state = roll(state);
   selected = null;
-  animateShuffle(i => wasFirstRoll || !heldBefore[i], persistAndRender);
+  animateShuffle(i => wasFirstRoll || !heldBefore[i], afterRoll);
+}
+
+function afterRoll() {
+  if (isBonusYahtzee(state)) {
+    state = applyBonusYahtzee(state);
+    persistAndRender();
+    flashCell('bonus');
+    return;
+  }
+  if (isFreshYahtzee(state)) selected = 'yahtzee';
+  persistAndRender();
 }
 
 function doEnter() {

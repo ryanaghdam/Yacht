@@ -4,7 +4,8 @@ import {
   newGame, roll, toggleHold, commit,
   scoreFor, legalCategories, previewScores,
   upperSubtotal, upperBonus, grandTotal, gameOver,
-  CATEGORIES, LOWER,
+  isBonusYahtzee, applyBonusYahtzee, isFreshYahtzee,
+  CATEGORIES,
 } from '../src/game.js';
 
 test('scoreFor: upper section counts matching faces', () => {
@@ -83,54 +84,60 @@ test('upperBonus: exactly 63 triggers +35, less does not', () => {
   assert.equal(upperBonus(g), 0);
 });
 
-test('joker rule: matching upper unfilled is forced', () => {
-  const j = newGame();
-  j.dice = [4,4,4,4,4];
-  j.rollsUsed = 1;
-  j.scores.yahtzee = 50;
-  assert.deepEqual(legalCategories(j), ['fours']);
+test('fresh yahtzee: 5-of-a-kind with an empty box is a legal 50-point score', () => {
+  const s = newGame();
+  s.dice = [3,3,3,3,3];
+  s.rollsUsed = 1;
+  assert.equal(isFreshYahtzee(s), true);
+  assert.equal(isBonusYahtzee(s), false);
+  assert.ok(legalCategories(s).includes('yahtzee'));
+  assert.equal(previewScores(s).yahtzee, 50);
 });
 
-test('joker rule: matching upper filled → any open lower box', () => {
-  const j = newGame();
-  j.dice = [4,4,4,4,4];
-  j.rollsUsed = 1;
-  j.scores.yahtzee = 50;
-  j.scores.fours = 20;
-  const legal = legalCategories(j);
-  assert.ok(!legal.includes('yahtzee'), 'yahtzee already filled');
-  assert.ok(legal.every(c => LOWER.includes(c) && c !== 'yahtzee'), 'only open lower boxes');
+test('bonus yahtzee: no boxes are legal — the bonus is auto-applied instead', () => {
+  const s = newGame();
+  s.dice = [4,4,4,4,4];
+  s.rollsUsed = 1;
+  s.scores.yahtzee = 50;
+  assert.equal(isBonusYahtzee(s), true);
+  assert.deepEqual(legalCategories(s), []);
 });
 
-test('joker rule: full house scored as 25 when placed via joker', () => {
-  const j = newGame();
-  j.dice = [4,4,4,4,4];
-  j.rollsUsed = 1;
-  j.scores.yahtzee = 50;
-  j.scores.fours = 20;
-  assert.equal(previewScores(j).fullHouse, 25);
-});
-
-test('yahtzee bonus: +100 when the yahtzee box was originally scored 50', () => {
-  let b = newGame();
-  b.dice = [3,3,3,3,3];
-  b.rollsUsed = 3;
-  b.scores.yahtzee = 50;
-  b.scores.threes = null;
-  const after = commit(b, 'threes');
+test('applyBonusYahtzee: credits +100 and advances the turn without filling any box', () => {
+  const s = newGame();
+  s.dice = [4,4,4,4,4];
+  s.rollsUsed = 1;
+  s.scores.yahtzee = 50;
+  s.scores.fours = null;
+  const startingTurn = s.turn;
+  const after = applyBonusYahtzee(s);
   assert.equal(after.bonus, 100);
-  assert.equal(after.scores.threes, 15);
+  assert.equal(after.turn, startingTurn + 1);
+  assert.equal(after.rollsUsed, 0);
+  assert.equal(after.scores.fours, null, 'no box filled');
+  assert.equal(after.scores.yahtzee, 50, 'yahtzee box unchanged');
+  assert.deepEqual(after.dice, [1,1,1,1,1]);
+  assert.deepEqual(after.held, [false,false,false,false,false]);
 });
 
-test('yahtzee bonus: no bonus when the yahtzee box was scored 0', () => {
-  let b = newGame();
-  b.dice = [3,3,3,3,3];
-  b.rollsUsed = 3;
-  b.scores.yahtzee = 0;
-  b.scores.threes = null;
-  const after = commit(b, 'threes');
-  assert.equal(after.bonus, 0);
-  assert.equal(after.scores.threes, 15, 'joker placement still applies');
+test('applyBonusYahtzee: stacks — a second bonus adds another +100', () => {
+  const s = newGame();
+  s.dice = [2,2,2,2,2];
+  s.rollsUsed = 1;
+  s.scores.yahtzee = 50;
+  s.bonus = 100;
+  const after = applyBonusYahtzee(s);
+  assert.equal(after.bonus, 200);
+});
+
+test('bonus yahtzee: no bonus when the yahtzee box was scored 0; normal legal boxes remain', () => {
+  const s = newGame();
+  s.dice = [4,4,4,4,4];
+  s.rollsUsed = 1;
+  s.scores.yahtzee = 0;
+  assert.equal(isBonusYahtzee(s), false);
+  assert.ok(legalCategories(s).length > 0);
+  assert.ok(!legalCategories(s).includes('yahtzee'), 'yahtzee already filled');
 });
 
 test('gameOver: true only when every category is filled', () => {
