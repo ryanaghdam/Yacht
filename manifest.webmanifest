@@ -1,0 +1,19 @@
+{
+  "name": "Yahtzee",
+  "short_name": "Yahtzee",
+  "description": "A minimalist dice game inspired by the MB Electronic handheld.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f766e",
+  "background_color": "#f6f5f0",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

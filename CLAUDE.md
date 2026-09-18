@@ -58,18 +58,26 @@ No sound. The game is silent — no audio effects, no SOUND toggle, no WebAudio.
 - Game logic is a pure, framework-free module with no DOM dependency — it should be trivially unit-testable later.
 - CSS: one stylesheet, custom properties for the palette, no preprocessor.
 
+## Offline / installable
+
+The app is a PWA. `sw.js` precaches the whole shell (HTML, CSS, JS, icon, manifest) on first visit; after that the page loads with no network, and localStorage keeps the game and high score. `manifest.webmanifest` lets it install to the home screen with the correct name, theme, and icon. Bump the `CACHE` constant in `sw.js` whenever shell files change so old caches get evicted on next visit.
+
 ## File layout
 
 ```
-index.html         # static markup for the device shell
-styles.css         # all styling, CSS variables, light/dark
+index.html            # static markup for the device shell
+styles.css            # all styling, CSS variables, light/dark
+manifest.webmanifest  # PWA manifest (name, theme, icon, display)
+sw.js                 # service worker: precache + offline fallback
+icons/
+  icon.svg            # app icon (maskable, teal die with 5 pips)
 src/
-  game.js          # pure rules engine: state, scoring, transitions
-  app.js           # DOM wiring — state, render, event handlers
-  storage.js       # localStorage load/save (game + high score)
+  game.js             # pure rules engine: state, scoring, transitions
+  app.js              # DOM wiring — state, render, event handlers
+  storage.js          # localStorage load/save (game + high score)
 test/
-  game.test.mjs    # node:test unit tests for the rules engine
-.claude/launch.json  # local dev server config (python3 -m http.server)
+  game.test.mjs       # node:test unit tests for the rules engine
+.claude/launch.json   # local dev server config (python3 -m http.server)
 ```
 
 A `ui/` subfolder with per-component custom elements (`<yz-die>`,
